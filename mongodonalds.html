@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mongodonald's Auto-Pedido</title>
+</head>
+<body>
+    <h1>Bienvenido a Mongodonald's</h1>
+    <button id="menu">Pedir Menú</button>
+    <button id="hamburguesa">Pedir Hamburguesa</button>
+    <button id="bebida">Pedir Bebida</button>
+    <button id="terminar">Terminar Pedido</button>
+
+    <form id="pedido" style="display:none;">
+        <select id="productos"></select>
+        <button id="enviarPedido" type="submit">Enviar Pedido</button>
+    </form>
+
+    <script>
+        function fetchProducts(type) {
+            return fetch(`http://mongodonalds.com/${type}`, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => data);
+        }
+
+        
+        function populateSelect(products) {
+            const select = document.getElementById('productosSelect');
+            select.innerHTML = '';
+            products.forEach(product => {
+                const option = document.createElement('option');
+                option.text = `${product.nombre} - ${product.precio}€`;
+                option.value = product.nombre;
+                select.add(option);
+            });
+        }
+
+       
+        document.getElementById('menu').addEventListener('click', async function() {
+            const products = await fetchProducts('menus');
+            populateSelect(products);
+            document.getElementById('pedidoForm').style.display = 'block';
+        });
+
+        document.getElementById('hamburguesa').addEventListener('click', async function() {
+            const products = await fetchProducts('hamburguesas');
+            populateSelect(products);
+            document.getElementById('pedidoForm').style.display = 'block';
+        });
+
+        document.getElementById('bebida').addEventListener('click', async function() {
+            const products = await fetchProducts('bebidas');
+            populateSelect(products);
+            document.getElementById('pedidoForm').style.display = 'block';
+        });
+
+        document.getElementById('terminar').addEventListener('click', function() {
+           
+        });
+
+        document.getElementById('pedido').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const selectedProduct = document.getElementById('productos').value;
+         
+        });
+    </script>
+</body>
+</html>
